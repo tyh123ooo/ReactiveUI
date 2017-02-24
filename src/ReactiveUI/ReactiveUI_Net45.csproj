@@ -84,6 +84,7 @@
     <Compile Include="ExpressionRewriter.cs" />
     <Compile Include="Interactions.cs" />
     <Compile Include="Platform\ComponentModelTypeConverter.cs" />
+    <Compile Include="UnhandledErrorException.cs" />
     <Compile Include="ViewAttributes.cs" />
     <Compile Include="Xaml\ReactiveUserControl.cs" />
     <Compile Include="Xaml\Attributes.cs" />
@@ -114,7 +115,7 @@
     <Compile Include="Interfaces.cs" />
     <Compile Include="IROObservableForProperty.cs" />
     <Compile Include="MessageBus.cs" />
-    <Compile Include="MobileLifecycle.cs" />
+    <Compile Include="SuspensionHost.cs" />
     <Compile Include="ObservableAsPropertyHelper.cs" />
     <Compile Include="ObservedChangedMixin.cs" />
     <Compile Include="OrderedComparer.cs" />

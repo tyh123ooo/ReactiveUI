@@ -91,7 +91,7 @@
     <Compile Include="Interfaces.cs" />
     <Compile Include="IROObservableForProperty.cs" />
     <Compile Include="MessageBus.cs" />
-    <Compile Include="MobileLifecycle.cs" />
+    <Compile Include="SuspensionHost.cs" />
     <Compile Include="ObservableAsPropertyHelper.cs" />
     <Compile Include="ObservedChangedMixin.cs" />
     <Compile Include="OrderedComparer.cs" />
@@ -112,6 +112,7 @@
     <Compile Include="RoutableViewModelMixin.cs" />
     <Compile Include="RoutingState.cs" />
     <Compile Include="RxApp.cs" />
+    <Compile Include="UnhandledErrorException.cs" />
     <Compile Include="ViewAttributes.cs" />
     <Compile Include="ViewLocator.cs" />
     <Compile Include="ScheduledSubject.cs" />

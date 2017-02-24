@@ -11,8 +11,12 @@ namespace ReactiveUI.XamForms
 {
     public class RoutedViewHost : NavigationPage, IActivatable
     {
-        public static readonly BindableProperty RouterProperty = BindableProperty.Create<RoutedViewHost, RoutingState>(
-            x => x.Router, null, BindingMode.OneWay);
+        public static readonly BindableProperty RouterProperty = BindableProperty.Create(
+            nameof(Router),
+            typeof(RoutingState),
+            typeof(RoutedViewHost),
+            default(RoutingState),
+            BindingMode.OneWay);
 
         public RoutingState Router {
             get { return (RoutingState)GetValue(RouterProperty); }
@@ -69,13 +73,13 @@ namespace ReactiveUI.XamForms
                             finally
                             {
                                 currentlyPopping = false;
+                                ((IViewFor)this.CurrentPage).ViewModel = Router.GetCurrentViewModel();
                             }
 
                             return Unit.Default;
                         })
-                    .Do(_ => ((IViewFor)this.CurrentPage).ViewModel = Router.GetCurrentViewModel())
                     .Subscribe());
-                
+
                 d(this.WhenAnyObservable(x => x.Router.Navigate)
                     .SelectMany(_ => PageForViewModel(Router.GetCurrentViewModel()))
                     .SelectMany(async x => {
@@ -135,7 +139,7 @@ namespace ReactiveUI.XamForms
                 .Subscribe();
         }
 
-        protected IObservable<Page> PageForViewModel(IRoutableViewModel vm) 
+        protected IObservable<Page> PageForViewModel(IRoutableViewModel vm)
         {
             if (vm == null) return Observable.Empty<Page>();
 
@@ -152,6 +156,7 @@ namespace ReactiveUI.XamForms
 
             var pg = (Page)ret;
             pg.Title = vm.UrlPathSegment;
+
             return Observable.Return(pg);
         }
     }

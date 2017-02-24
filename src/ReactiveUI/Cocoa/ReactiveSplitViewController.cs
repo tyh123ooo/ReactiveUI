@@ -37,8 +37,7 @@ namespace ReactiveUI
         protected ReactiveSplitViewController(NSCoder coder) : base(coder) { setupRxObj(); }
         protected ReactiveSplitViewController() { setupRxObj(); }
 
-        public event PropertyChangingEventHandler PropertyChanging
-        {
+        public event PropertyChangingEventHandler PropertyChanging {
             add { PropertyChangingEventManager.AddHandler(this, value); }
             remove { PropertyChangingEventManager.RemoveHandler(this, value); }
         }
@@ -48,8 +47,7 @@ namespace ReactiveUI
             PropertyChangingEventManager.DeliverEvent(this, args);
         }
 
-        public event PropertyChangedEventHandler PropertyChanged
-        {
+        public event PropertyChangedEventHandler PropertyChanged {
             add { PropertyChangedEventManager.AddHandler(this, value); }
             remove { PropertyChangedEventManager.RemoveHandler(this, value); }
         }
@@ -61,18 +59,16 @@ namespace ReactiveUI
 
         /// <summary>
         /// Represents an Observable that fires *before* a property is about to
-        /// be changed.         
+        /// be changed.
         /// </summary>
-        public IObservable<IReactivePropertyChangedEventArgs<ReactiveSplitViewController>> Changing
-        {
+        public IObservable<IReactivePropertyChangedEventArgs<ReactiveSplitViewController>> Changing {
             get { return this.getChangingObservable(); }
         }
 
         /// <summary>
         /// Represents an Observable that fires *after* a property has changed.
         /// </summary>
-        public IObservable<IReactivePropertyChangedEventArgs<ReactiveSplitViewController>> Changed
-        {
+        public IObservable<IReactivePropertyChangedEventArgs<ReactiveSplitViewController>> Changed {
             get { return this.getChangedObservable(); }
         }
 
@@ -100,9 +96,9 @@ namespace ReactiveUI
         public IObservable<Unit> Deactivated { get { return deactivated.AsObservable(); } }
 
 #if UIKIT
-        public override void ViewDidAppear(bool animated)
+        public override void ViewWillAppear(bool animated)
         {
-            base.ViewDidAppear(animated);
+            base.ViewWillAppear(animated);
             activated.OnNext(Unit.Default);
             this.ActivateSubviews(true);
         }
@@ -114,9 +110,9 @@ namespace ReactiveUI
             this.ActivateSubviews(false);
         }
 #else
-        public override void ViewDidAppear()
+        public override void ViewWillAppear()
         {
-            base.ViewDidAppear();
+            base.ViewWillAppear();
             activated.OnNext(Unit.Default);
 #if UNIFIED
             this.ActivateSubviews(true);
@@ -132,5 +128,28 @@ namespace ReactiveUI
 #endif
         }
 #endif
+    }
+
+    public abstract class ReactiveSplitViewController<TViewModel> : ReactiveSplitViewController, IViewFor<TViewModel>
+        where TViewModel : class
+    {
+#if UIKIT
+        protected ReactiveSplitViewController(string nibName, NSBundle bundle) : base(nibName, bundle) { }
+#endif
+        protected ReactiveSplitViewController(IntPtr handle) : base(handle) { }
+        protected ReactiveSplitViewController(NSObjectFlag t) : base(t) { }
+        protected ReactiveSplitViewController(NSCoder coder) : base(coder) { }
+        protected ReactiveSplitViewController() { }
+
+        TViewModel _viewModel;
+        public TViewModel ViewModel {
+            get { return _viewModel; }
+            set { this.RaiseAndSetIfChanged(ref _viewModel, value); }
+        }
+
+        object IViewFor.ViewModel {
+            get { return ViewModel; }
+            set { ViewModel = (TViewModel)value; }
+        }
     }
 }
